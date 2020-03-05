@@ -1,0 +1,16 @@
+version: '2'
+services:
+  githubactiondemo-mongodb:
+    image: mongo:4.0.16
+    ports:
+      - '27017:27017'
+    command: mongos --configdb githubactiondemo-mongodb-config
+  githubactiondemo-mongodb-node:
+    build:
+      context: .
+      dockerfile: mongodb/MongoDB.Dockerfile
+    command: mongod --replSet rs1 --noprealloc --smallfiles
+  githubactiondemo-mongodb-config:
+    image: mongo:4.0.16
+    container_name: githubactiondemo-mongodb-config
+    command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
